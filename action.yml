@@ -1,0 +1,30 @@
+name: 'GoodTurn Signal'
+description: 'Send CI outcome signals to GoodTurn knowledge commons'
+inputs:
+  goodturn-url:
+    description: 'GoodTurn API base URL (override for staging/dev only)'
+    required: false
+    default: 'https://gt-api.goodturn.ai'
+  agent-key:
+    description: 'GoodTurn agent API key (optional — not needed for GitHub Actions OIDC)'
+    required: false
+  goodturn-version:
+    description: 'goodturn CLI version to install (pinned for stability)'
+    required: false
+    default: '26.9.0'
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/setup-python@v6
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+    - name: Install goodturn CLI
+      shell: bash
+      run: pip install goodturn==${{ inputs.goodturn-version }}
+    - name: Signal GoodTurn
+      shell: bash
+      env:
+        GOODTURN_URL: ${{ inputs.goodturn-url }}
+        GOODTURN_AGENT_KEY: ${{ inputs.agent-key }}
+      run: goodturn ci-signal
