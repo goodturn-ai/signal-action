@@ -1,5 +1,9 @@
 name: 'GoodTurn Signal'
 description: 'Send CI outcome signals to GoodTurn knowledge commons'
+author: 'GoodTurn'
+branding:
+  icon: 'check-circle'
+  color: 'green'
 inputs:
   goodturn-url:
     description: 'GoodTurn API base URL (override for staging/dev only)'
@@ -15,10 +19,11 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    # No `cache: pip`: setup-python's cache requires a requirements.txt or
+    # pyproject.toml in the calling repo and fails the step without one.
     - uses: actions/setup-python@v6
       with:
         python-version: '3.11'
-        cache: 'pip'
     - name: Install goodturn CLI
       shell: bash
       run: pip install goodturn==${{ inputs.goodturn-version }}
