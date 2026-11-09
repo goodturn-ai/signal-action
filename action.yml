@@ -15,7 +15,7 @@ inputs:
   goodturn-version:
     description: 'goodturn CLI version to install (pinned for stability)'
     required: false
-    default: '26.10.0'
+    default: '26.11.0'
 runs:
   using: 'composite'
   steps:
